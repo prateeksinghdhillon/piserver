@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/update-ip", async (req, res) => {
-  const { username, localIp } = req.body;
+  const { username, localIp, ssid } = req.body;
 
   try {
     const user = await User.findOne({ username });
@@ -79,6 +79,7 @@ router.post("/update-ip", async (req, res) => {
       return res.status(400).json({ message: "Invalid Username." });
     }
     user.localIp = localIp;
+    user.ssid = ssid;
     await user.save();
     res.status(200).json({ message: `IP Updated successful! to ${localIp}` });
   } catch (err) {
