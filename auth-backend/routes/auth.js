@@ -59,9 +59,28 @@ router.post("/login", async (req, res) => {
     // Generate random 15 character token
     const token = crypto.randomBytes(15).toString("hex");
     const localIp = user.localIp;
+    const fullname = user.fullname;
     user.token = token;
     await user.save();
-    res.status(200).json({ message: "Login successful!", token , localIp});
+    res
+      .status(200)
+      .json({ message: "Login successful!", token, localIp, fullname });
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
+router.post("/update-ip", async (req, res) => {
+  const { username, localIp } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid Username." });
+    }
+    user.localIp = localIp;
+    await user.save();
+    res.status(200).json({ message: `IP Updated successful! to ${localIp}` });
   } catch (err) {
     res.status(500).json({ message: "Server error." });
   }
