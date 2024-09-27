@@ -60,11 +60,12 @@ router.post("/login", async (req, res) => {
     const token = crypto.randomBytes(15).toString("hex");
     const localIp = user.localIp;
     const fullname = user.fullname;
+    const ssid = user.ssid;
     user.token = token;
     await user.save();
     res
       .status(200)
-      .json({ message: "Login successful!", token, localIp, fullname });
+      .json({ message: "Login successful!", token, localIp, fullname, ssid });
   } catch (err) {
     res.status(500).json({ message: "Server error." });
   }
